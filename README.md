@@ -29,3 +29,7 @@
 ### TDD
 
 - [단위 테스트와 TDD](https://github.com/akskflwn/TIL/blob/main/TDD/Testcode.md)
+
+### OS
+
+- [운영체제 아주 쉬운 세가지 이야기]("https://github.com/akskflwn/TIL/blob/main/OS/os.md")
