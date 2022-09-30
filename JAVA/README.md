@@ -1,12 +1,12 @@
 # JAVA
 
 - JAVA
-  - JVM 에 대해서, GC의 원리
-  - Collection
-  - Annotation
+  - [JVM 에 대해서, GC의 원리](#jvm-에-대해서-gb의-원리)
+  - [Collection](#collection)
+  - [Annotation](#Anota)
     - Reference
-  - Generic
-  - Final ketword
+  - [Generic](#generic)
+  - [Final keyword](#final-keyword)
   - Overriding vs Overloading
   - Access Modifier
   - Wrapper class
@@ -73,7 +73,7 @@ GC를 수행하는 모듈(쓰레드)이 있다.
 > ## Runtime Data Area
 >
 > 프로그램을 수행하기 위해 OS에서 할당받은 메모리 공간
-> [image](https://user-images.githubusercontent.com/104490310/193033208-63ef217f-cd53-49a2-9156-ce2fd6779b20.png)
+> ![image](https://user-images.githubusercontent.com/104490310/193033208-63ef217f-cd53-49a2-9156-ce2fd6779b20.png)
 
 ### **1)PC Register**
 

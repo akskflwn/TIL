@@ -16,6 +16,8 @@
 
 ### JAVA
 
+- [JAVA](https://github.com/akskflwn/TIL/tree/main/JAVA#readme)
+
 ### JPA
 
 ### SPRING BOOT
@@ -32,4 +34,4 @@
 
 ### OS
 
-- [운영체제 아주 쉬운 세가지 이야기]("https://github.com/akskflwn/TIL/blob/main/OS/os.md")
+- [운영체제 아주 쉬운 세가지 이야기](https://github.com/akskflwn/TIL/blob/main/OS/os.md)
