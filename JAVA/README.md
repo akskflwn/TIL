@@ -19,6 +19,33 @@
 
 ## JVM 에 대해서, Gb의 원리
 
+VM은 크케 Class Loader, Excution Engine, Garbage Collector, Runtime Data Area(Memory Area) 로 나누어져 구성되어 있다.
+
+JVM의 기본적인 수행과정
+
+프로그램 실행시 개발자의 의해 작성된 소스코드(.java)는 자바 컴파일러 (javac)를 통해
+Byte Code(.class) 파일로 변환 된다.
+
+이렇게 변환 된 Byte Code 파일을 JVM 내부의 Class Loader가 읽어 들여 Runtime Data Area에 저장하게된다.
+
+저장된 코드들을 Excution Engine이 하나의 명령어 단위로 읽어들여 프로그램을 실행하게 되고, 사용이 끝나 더 이상 사용하지 않는 코드들을 Garbage Collector 가 모아서 메모리에서 해제한다.
+
+Class Loader : .class 파일을 가져와서(로드) 이를 Runtime Data Area에 올려주는 역할. 여기올라간 파일을 Excution Engine 에 의해 실행된다.
+
+Runtime Data Area(=memory Area) : JVM 이 프로그램을 수행하기 위해 OS로 부터 할당받은 메모리 공간!
+
+또한 이 메모리 영역은 크게 Method Area,Stack,Heap,PC Register, Native Method Area로 구분 된다.
+
+Method Area -자바 프로그램에서 사용되는 클래스에 대한 정보와 클래스 변수 저장(필드, 메소드, 생성자,...등)
+Heap
+
+- new 연산자를 이용해 동적으로 생성된 객체, 배열 등을 저장하는 영역.
+  Stack 영역에는 주소가, Heap영역에는 주소에 해당하는 실제 값이 저장된다.
+  JVM이 중단되거나 GC가 실행되기 전까지 영구적으로 저장된다.
+  여기서 사용이 끝난 객체들을 Garbage Colletor가 모아서 처리하게 된다.
+  Stack -프로그램 실행 중 메서드가 호출되면, Stack 영역에 각각의 메서드를 위한 메모리가 할당된다(즉 각 메서드는 하나씩의 Stack을 가지게 된다)
+  Stack 영역은 이 메서드들 안에서 사용되어지는 값을 저장하며, 호출된 메서드의 지역변수,매개변수, 리턴 값 및 연산값들을 임시로 저장하는 공간이다. 임시로 저장하기 때문에 사용이 끝나면 Stack 영역에서 해제된다.
+
 ---
 
 ## JVM 이란?
