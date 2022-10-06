@@ -404,3 +404,94 @@ a -> System.out.println(a);
 중괄호에 return 문만 있다면 리턴 생략 가능
 (x,y) -> x + y;
 ```
+
+## 람다식을 이용한 forEach 사용법
+
+배열,List, Map 등에 들어있는 값을 순서대로 꺼내거나 처리를 해야 할 때 for 문을 사용하는 경우가 많다.
+forEach 함수를 for 같은 반복문을 처리할 때 사용하는 함수이다.
+
+> forEach 사용 방법
+
+```java
+collection.forEach(변수 -> 반복처리(변수))
+```
+
+```java
+public static void main(String[] args) {
+
+		List<String> list = new ArrayList<>();
+		list.add("a");
+		list.add("p");
+		list.add("p");
+		list.add("l");
+		list.add("e");
+
+		// 확장 for문
+		System.out.println("확장 for문 출력");
+		for (String s : list) {
+			System.out.println(s);
+		}
+
+		// forEach 함수
+		System.out.println("forEach 함수 출력");
+		list.forEach(s -> System.out.println(s));
+	}
+```
+
+for 문을 사용해서 출력한 결과와 forEach 함수를 사용해 출력한 결과는 같다.
+forEach 함수는 람다식으로 사용하기 떄문에 소스도 간결하게 작성할수 있다.
+-> 앞에 있는 s 에 리스트 변수인 list에 저장되있는 값을 하나씩 대입합니다
+그리고 출력문은 s안에 저장되어있는 값을 출력합니다.
+
+> 배열에서 forEach 사용 방법
+> 배열에서 forEach 함수를 사용하기 위해서는 Stream API를 이용해야 한다.
+
+**배열 forEach 예제**
+
+```java
+public class Main {
+
+	public static void main(String[] args) {
+
+		String[] strArray = { "a", "p", "p", "l", "e" };
+		Arrays.stream(strArray).forEach(s -> System.out.println(s));
+```
+
+**Map forEach 사용 예제**
+
+```java
+
+public class Main {
+
+	public static void main(String[] args) {
+
+		Map<String, String> map = new HashMap<>();
+		map.put("korea", "korean");
+		map.put("usa", "english");
+		map.put("japan", "japanese");
+
+		map.forEach((key, value) -> System.out.println(key + " : " + value));
+	}
+}
+```
+
+**List forEach 사용 예제**
+
+```java
+public static void main(String[] args) {
+
+    	List<String> list = new ArrayList<>();
+    	list.add("a");
+    	list.add("p");
+    	list.add("p");
+    	list.add("l");
+    	list.add("e");
+
+    	list.forEach(s -> System.out.println(list.indexOf(s) + " : " + s));
+    }
+```
+
+> 정리
+
+람다식을 사용하기 떄문에 소스를 간결하게 작성할 수 있다.
+간단한 반복을 처리할 때에는 forEach와 람다식을 활용해보자.
