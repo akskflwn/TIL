@@ -495,3 +495,59 @@ public static void main(String[] args) {
 
 람다식을 사용하기 떄문에 소스를 간결하게 작성할 수 있다.
 간단한 반복을 처리할 때에는 forEach와 람다식을 활용해보자.
+
+## Stream
+
+> Stream의 특징
+
+스트림은 컬레션(배열 포함)의 저장 요소를 하나씩 참조해서 람다식으로 처리할 수 있도록 해주는 반복자입니다.
+
+우리는 사실 반복자를 스트림이 아니더라도 계속 사용해 왔습니다. 단적인 예로 Iterator 반복자가 있다.
+
+```java
+import java.util.*;
+
+public class Main {
+
+  public static void main(String[] args) {
+    List<Integer> list = Arrays.asList(1, 2, 3);
+    Iterator<Integer> it = list.iterator();
+    while (it.hasNext()) {
+      int num = it.next();
+      System.out.println(num);
+    }
+  }
+
+}
+```
+
+정수가 있는 리스트를 하나씩 순회하면서 값을 출력하는 단순한 코드입니다. 이제,이를 스트림으로 바꿔보겠습니다.
+
+```java
+import java.util.*;
+import java.util.stream.*;
+
+public class Main {
+
+  public static void main(String[] args) {
+    List<Integer> list = Arrays.asList(1, 2, 3);
+    Stream<Integer> stream = list.stream();
+    stream.forEach(System.out::println);
+  }
+
+}
+```
+
+(1) 람다식으로 요소 처리 코드를 제공한다.
+위에 코드에서 볼 수 있듯이, 스트림은 람다식 또는 메소드 참초를 이용합니다.따라서
+코드가 간결해지는 장점이 있습니다.
+
+(2) 내부 반복자를 사용하므로 병렬 처리가 쉽다.
+
+외부 반복자란 개발자가 코드로 직접 컬렉션의 요소를 반복해서 가져오는 코드 패턴을 말합니다. 우리가 흔히 사용하는 index를 이용한 반복문이나 Iterator를 사용한 while 문은 모두 외부 반복자를 이용하는 것입니다.
+반면, 내부 반복자는 컬렉션 내부에서 요소들을 반복시키고, 개발자는 요소당 처리해야 할 코드만 제공하는 코드 패턴을 말합니다.
+
+(3) 중간 처리와 최종 처리가 존재한다.
+스트림은 컬렉션 요소에 대해 중간 처리와 최종 처리를 수행할 수있는데, 중간 처리에서는 매핑,필터링,정렬을 수행하고 최종 처리에 반복,카운팅,평균,총합 등의 집계 처리를 수행합니다.
+
+만약, 학생 객체를 요소로 가지는 컬렉션이 있다고 가정하면, 중간 처리에서 학생의 수학 점수를 뽑아 내고 최종 처리에서는 수학 점수의 평균값을 산출하는 행위를 할 수 있습니다.
