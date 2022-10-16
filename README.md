@@ -38,4 +38,4 @@
 
 ### NetWork
 
-- [컴퓨터 네트워킹 하양식 접근](https://github.com/akskflwn/TIL/blob/main/Network/README.md)
+- [Network](https://github.com/akskflwn/TIL/blob/main/Network/README.md)
