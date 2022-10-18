@@ -121,3 +121,84 @@ public class Main {
     }
 }
 ```
+
+백준 1260 번 DFS, BFS 문제
+
+```JAVA
+import java.util.*;
+
+public class Main {
+    public int N;
+
+    public void solve() {
+        Scanner sc = new Scanner(System.in);
+        N = sc.nextInt() + 1;
+        int M = sc.nextInt();
+        int start = sc.nextInt();
+        int[][] arr = new int[N][N];
+        int[][] visited = new int[N][N];
+
+        /**
+         * map[from][to] == 1;
+         * edge from -> exist
+         */
+
+        for (int i = 0; i < N; ++i) {
+            int fr = sc.nextInt();
+            int to = sc.nextInt();
+            arr[fr][to] = 1;
+            arr[to][fr] = 1;
+        }
+
+        DFS(arr, visited, start);
+
+        System.out.println("\n");
+
+        visited = new int[N][N];
+        Queue<Integer> que = new LinkedList<>();
+        que.add(start);
+        BFS(arr, visited, que);
+
+    }
+
+    private void BFS(int[][] arr, int[][] visited, Queue<Integer> que) {
+        while (que.size() > 0) {
+            Integer fr = que.poll();
+            System.out.printf("%d ", fr);
+
+            for (int i = 0; i < N; i++) {
+                visited[i][fr] = 1;
+            }
+
+            for (int to = 0; to < N; to++) {
+                if (arr[to][fr] == 1 && visited[fr][to] == 0) {
+                    if (!que.contains(to))
+                        que.add(to);
+                }
+
+            }
+        }
+    }
+
+    public void DFS(int[][] arr, int[][] visited, int fr) {
+        System.out.printf("%d ", fr);
+
+        for (int i = 0; i < N; ++i) {
+            visited[i][fr] = 1;
+        }
+        for (int to = 0; to < N; ++to) {
+            if (arr[fr][to] == 1 && visited[fr][to] == 0) {
+                DFS(arr, visited, to);
+            }
+        }
+    }
+
+
+    public static void main(String[] args) {
+        Main main = new Main();
+        main.solve();
+
+    }
+}
+
+```
