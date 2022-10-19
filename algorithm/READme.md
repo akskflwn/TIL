@@ -120,9 +120,22 @@ public class Main {
         new Main().solution();
     }
 }
+
+
 ```
 
-백준 1260 번 DFS, BFS 문제
+# DFS와 BFS
+
+내가 생각하는 DFS
+
+dfs는 한놈만 팬다. 보통 재귀함수나 스택으로 구현하며 연결된 노드를 깊이 있게 탐색한다.
+미로나 지도같은 유형을 풀때 자주 사용된다.
+
+내가 생각하는 BFS
+bfs는 이름이 넓이 우선 탐색
+bfs 는 구현하기위해 Queue를 사용할 수 있다.
+
+백준 1260 번 문제
 
 ```JAVA
 import java.util.*;
@@ -201,4 +214,108 @@ public class Main {
     }
 }
 
+```
+
+2606번 문제 바이러스
+
+dfs 풀이
+
+```java
+import java.util.*;
+
+public class Main {
+    static int cnt = 0;
+
+    static void dfs(int[][] a, boolean[] check, int v) {
+        if (check[v] == true) return;
+
+        check[v] = true;
+        cnt++;
+
+        for (int j = 0; j < a[v].length; j++) {
+            if (a[v][j] == 1 && !check[j])
+                dfs(a, check, j);
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        int e = sc.nextInt();
+
+        int a[][] = new int[n + 1][n + 1];
+        boolean check[] = new boolean[n + 1];
+
+        for (int i = 0; i < e; i++) {
+            int v1 = sc.nextInt();
+            int v2 = sc.nextInt();
+
+            a[v1][v2] = 1;
+            a[v2][v1] = 1;
+        }
+
+        dfs(a, check, 1);
+
+        System.out.println(cnt - 1);
+    }
+
+
+}
+
+
+```
+
+bfs 풀이
+
+```java
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class Main {
+    static int[][] node;
+    static int[] check;
+
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int n = scanner.nextInt();
+        int m = scanner.nextInt();
+
+        node = new int[n + 1][n + 1];
+        check = new int[n + 1];
+
+        for (int i = 0; i < m; i++) {
+            int from = scanner.nextInt();
+            int to = scanner.nextInt();
+
+            node[from][to] = 1;
+            node[to][from] = 1;
+
+        }
+        bfs(1);
+    }
+
+    private static void bfs(int start) {
+        Queue<Integer> queue = new LinkedList<>();
+        queue.offer(start);
+        int cnt = 0;
+        check[start] = 1;
+
+        while (!queue.isEmpty()){
+            int from = queue.poll();
+            for (int i = 1; i < node.length ; i++) {
+                if(node[from][i]==1 && check[i]!=1){
+                    queue.offer(i);
+                    check[i]= 1;
+                    cnt++;
+                }
+            }
+        }
+        System.out.println(cnt);
+
+    }
+}
 ```
