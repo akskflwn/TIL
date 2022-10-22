@@ -165,6 +165,7 @@ public class Main {
         int n = sc.nextInt();
         int cnt = 0;
 
+
         while (n % 5 != 0) {
             n -= 3;
             cnt++;
@@ -376,4 +377,138 @@ public class Main {
 
     }
 }
+```
+
+1012번 유기농 배추 dfs,bfs
+
+dfs 풀이
+
+```java
+import java.util.*;
+
+public class Main {
+    static int M;
+    static int N;
+    static int K;
+    static int[][] arr;
+    static boolean[][] visit;
+    static int[] dirX = {0, 0, -1, 1};
+    static int[] dirY = {-1, 1, 0, 0};
+
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int T = sc.nextInt();
+
+        for (int i = 0; i < T; i++) {
+            M = sc.nextInt();
+            N = sc.nextInt();
+            K = sc.nextInt();
+            arr = new int[M][N];
+            visit = new boolean[M][N];
+            for (int j = 0; j < K; j++) {
+                arr[sc.nextInt()][sc.nextInt()] = 1;
+            }
+            int count = 0;
+            for (int m = 0; m < M; m++) {
+                for (int n = 0; n < N; n++) {
+                    if (arr[m][n] == 1 && !visit[m][n]) {
+                        dfs(m, n);
+                        count++;
+                    }
+                }
+            }
+            System.out.println(count);
+        }
+
+    }
+
+    private static void dfs(int i, int j) {
+        visit[i][j] = true;
+
+        for (int k = 0; k < 4; k++) {
+            int row = i + dirX[k];
+            int col = j + dirY[k];
+
+            if (row >= 0 && col >= 0 && row < M && col < N) {
+                if (arr[row][col] == 1 && !visit[row][col])
+                    dfs(row, col);
+            }
+        }
+
+    }
+
+}
+
+
+```
+
+bfs 풀이
+
+```java
+import java.util.*;
+
+public class Main {
+    static int M,N,K;
+    static int[][] cabbage;
+    static boolean[][] visit;
+    static int count;
+    static int[] dx = {0,0,-1,1};
+    static int[] dy = {-1,1,0,0};
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int T = sc.nextInt();
+
+        for (int i = 0; i < T; i++) {
+            M = sc.nextInt();
+            N = sc.nextInt();
+            K = sc.nextInt();
+            cabbage = new int[M][N];
+            visit = new boolean[M][N];
+            count=0;
+
+            for (int j = 0; j < K; j++) {
+                cabbage[sc.nextInt()][sc.nextInt()] = 1;
+            }
+
+            for (int j = 0; j < M; j++) {
+                for (int k = 0; k < N; k++) {
+                    if(cabbage[j][k]==1 && !visit[j][k]){
+                        bfs(j,k);
+                        count++;
+                    }
+
+                }
+            }
+            System.out.println(count);
+        }
+    }
+
+    private static void bfs(int j, int k) {
+        Queue<int[]> qu = new LinkedList<>();
+        qu.offer(new int[] {j,k});
+
+        while (!qu.isEmpty()){
+            j = qu.peek()[0];
+            k = qu.peek()[1];
+            visit[j][k] = true;
+            qu.poll();
+            for (int i = 0; i < 4; i++) {
+                int cx = j + dx[i];
+                int cy = k + dy[i];
+                if(cx>=0 && cy >= 0 && cx<M&&cy<N){
+                    if(!visit[cx][cy] && cabbage[cx][cy]==1){
+                        qu.add(new int[]{cx,cy});
+                        visit[cx][cy] = true;
+                    }
+                }
+
+            }
+        }
+    }
+}
+
 ```
