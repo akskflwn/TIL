@@ -7,6 +7,7 @@
 
 - [그리디 유형](#그리디-유형)
 - [DFS와 BFS유형](#dfs와-bfs)
+- [DP 유형](#DP)
 
 # 코딩 테스트를 위한TIP
 
@@ -511,4 +512,42 @@ public class Main {
     }
 }
 
+```
+
+# DP
+
+재귀 기본문제 피보나치
+
+```java
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+class Main {
+    static Map<Integer,Integer> fiboCache = new HashMap<>();
+    public static void main(String[] args) {
+       Scanner sc = new Scanner(System.in);
+       int n = sc.nextInt();
+
+        System.out.println(fibonacci(n));
+    }
+
+
+    private static int fibonacci(int n) {
+        fiboCache.put(0, 0);
+        fiboCache.put(1, 1);
+        return cachedFib(n);
+    }
+
+    private static int cachedFib(int n) {
+        if(fiboCache.containsKey(n)){
+            return fiboCache.get(n);
+        }
+
+        int value = cachedFib(n-1)+ cachedFib(n-2);
+        fiboCache.put(n,value);
+        return value;
+    }
+}
 ```
