@@ -9,6 +9,7 @@
 - [DFS와 BFS유형](#dfs와-bfs)
 - [DP 유형](#DP)
 - [정렬 유형](#정렬)
+- [이진 탐색](#이진탐색)
 
 # 코딩 테스트를 위한TIP
 
@@ -756,6 +757,134 @@ public class Quick_sort {
         int arr[] = {1,3,2};
         sort(arr);
         System.out.println(Arrays.toString(arr));
+    }
+}
+```
+
+# 이진 탐색
+
+이진탐색은 배열의 데이터가 정렬되어 있으만 사용할 수 있는 알고리즘이다.
+
+- 데이터가 무작위 일때 는 사용할 수 없지만 , 이미 정렬되어 있다면 매우 빠르게
+  탐색할 수 있다는 특징이 있다.
+- 이진 탐색은 탐색 범위를 절반씩 좁혀가며 데이터를
+  탐색하는 특징이있다.
+
+```java
+public class binarySearch {
+
+
+    static int binarySearch1(int key, int lo, int hi) {
+        int mid;
+        if (lo <= hi) {
+            mid = (lo + hi) / 2;
+
+            if (key == mid) {
+                return mid;
+            } else if (key < arr[mid]) {
+                return binarySearch1(key, lo, mid - 1);
+            } else
+                return binarySearch1(key, mid + 1, hi);
+        }
+        return -1;
+    }
+
+    static int binarySearch2(int key, int lo, int hi) {
+        int mid;
+        while (lo <= hi) {
+            mid = (lo + hi) / 2;
+            if (mid == key) {
+                return mid;
+            } else if (key < arr[mid]) {
+                hi = mid - 1;
+            } else {
+                lo = mid + 1;
+            }
+        }
+        return -1;
+    }
+}
+```
+
+백준 10816 숫자카드 2
+
+lowerBound = 하한선
+upperBound = 상향선
+
+하한선 = 하한은 찾고자 하는 값 이상의 값이 처음으로 나타나는 위치를 의미한다
+상향선 = 상한은 찾고자 하는 값을 초과한 값을 처음 만나는 위치다
+
+숫자가 중복된 중복된 횟수 = upperBound - lowerBound
+
+```java
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.util.Arrays;
+import java.util.StringTokenizer;
+
+public class Main {
+    public static int[] arr;
+
+    public static void main(String[] args) throws IOException {
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        int N = Integer.parseInt(br.readLine());
+        arr = new int[N];
+
+        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+        for (int i = 0; i < N; i++) {
+            arr[i] = Integer.parseInt(st.nextToken());
+        }
+
+        Arrays.sort(arr);
+
+        int M = Integer.parseInt(br.readLine());
+
+        st = new StringTokenizer(br.readLine(), " ");
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < M; i++) {
+            int key = Integer.parseInt(st.nextToken());
+            sb.append(upperBound(arr, key) - lowerBound(arr, key)).append(' ');
+        }
+        System.out.println(sb);
+
+    }
+
+    private static int upperBound(int[] arr, int key) {
+        int lo = 0;
+        int hi = arr.length;
+
+        while (lo < hi) {
+
+            int mid = (lo + hi) / 2;
+
+            if (key < arr[mid]) {
+                hi = mid;
+            } else {
+                lo = mid + 1;
+            }
+        }
+        return lo;
+    }
+
+    private static int lowerBound(int[] arr, int key) {
+        int lo = 0;
+        int hi = arr.length;
+
+        while (lo < hi) {
+            int mid = (lo + hi) / 2;
+
+            if (key <= arr[mid]) {
+                hi = mid;
+            } else {
+                lo = mid + 1;
+            }
+        }
+        return lo;
     }
 }
 ```
