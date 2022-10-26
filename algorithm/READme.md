@@ -6,10 +6,11 @@
 * [백준 알고리즘 문제풀이](#백준-알고리즘-문제풀이)
 
 - [그리디 유형](#그리디-유형)
+- [재귀](#재귀)
 - [DFS와 BFS유형](#dfs와-bfs)
-- [DP 유형](#DP)
 - [정렬 유형](#정렬)
 - [이진 탐색](#이진탐색)
+- [DP 유형](#DP)
 
 # 코딩 테스트를 위한TIP
 
@@ -183,6 +184,37 @@ public class Main {
     }
 }
 
+
+```
+
+# 재귀
+
+- 재귀란 자신을 정의할 때 자기 자신을 참조하는 방법을 재귀라고 한다.
+- 알고리즘 자체가 재귀가 자연스럽거나 호출을 많이 하지 않는 범위일때 쓰이고 그 외에는 자주 쓰이지 않음
+- 재귀가 끝나는 시점을 정확하게 구현해야함
+  팩토리얼
+
+```java
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        sc.close();
+
+        int sum = factorial(n);
+        System.out.println(sum);
+    }
+
+    private static int factorial(int n) {
+        if(n<=1){
+            return 1;
+        }
+        return n * factorial(n-1);
+    }
+}
 
 ```
 

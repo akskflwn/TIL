@@ -227,3 +227,5 @@ public class MemberRegisterService{
 ```
 
 DI를 사용하면 MemberDao 객체를 사용하는 클래스가 세 개여도 변경할 곳은 의존 주입 대상이 되는 객체를 생성하는 코드 한 곳뿐이다. 앞서 의존 객체를 직접 생성했던 방식에 비해 변경할 코드가 한 곳으로 집중되는 것을 알 수 있다.
+
+sring.md
