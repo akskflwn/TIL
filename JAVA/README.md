@@ -17,6 +17,7 @@
     - ThreadLocal
       - Personal Recommendation
   - [추상클래스와 인터페이스의 차이](#인터페이스와-추상클래스를-사용하는-이유)
+  - [Enum 활용 & Enum 리스트 가져오기](#enum-활용--enum-리스트-가져오기)
 
 ## JVM 에 대해서, Gb의 원리
 
@@ -698,3 +699,5 @@ interface Fightable extends Movable, Attackable {
 부모클래스B 에도 move() 라는 동일한 시그니처를 가진 메서드가 존재한다면 , 자식클래스는 둘 중 어느것을 상속 받아야할까?
 
 자식클래스 입장에서는 , move() 메서드를 상속 받을때, 어느 부모의 메서드를 상속받야하 할지 파악할 수 없게 되므로 이미 구현이 완료된 동일 시그니처의 메서드를 상속받는 일은 결국 불가능하다.
+
+# Enum 활용 & Enum 리스트 가져오기
