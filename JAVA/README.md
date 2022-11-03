@@ -701,3 +701,258 @@ interface Fightable extends Movable, Attackable {
 자식클래스 입장에서는 , move() 메서드를 상속 받을때, 어느 부모의 메서드를 상속받야하 할지 파악할 수 없게 되므로 이미 구현이 완료된 동일 시그니처의 메서드를 상속받는 일은 결국 불가능하다.
 
 # Enum 활용 & Enum 리스트 가져오기
+
+### 기본 설정
+
+예를 들어 **중개료 계약서 관리** 라는 시스템을 만든다.
+계약서의 항목은 다음과 같습니다.
+
+- 회사명
+- 수수료
+- 수수료 타입
+  - 기록된 수수료를 %로 볼지, 실제 원단위의 금액으로 볼지를 나타냅니다.
+- 수수료절삭
+
+  - 수수료의 일정 자리수를 반올림/올림/버림할 것인지를 나타냅니다.
+
+  가장 쉽게 domain 클래스를 작성해보자.
+
+```java
+
+Contract.java
+
+@Entity
+public class Contract{
+
+  @Id
+  @GeneratedValue
+  private Long id;
+
+  @Colum(nullable = false)
+  private String company;
+
+  @Colum(nullable = false)
+  private double commission; //수수료
+
+  @Colum(nullable = false)
+  private String commissionType; //수수료타입
+
+  @Colum(nullable = false)
+  private String commissionCutting; //수수료 절삭
+
+  pulbic Contract() {}
+
+  public Contract(String company, double commission, String commissionType, String commissionCutting) {
+        this.company = company;
+        this.commission = commission;
+        this.commissionType = commissionType;
+        this.commissionCutting = commissionCutting;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public double getCommission() {
+        return commission;
+    }
+
+    public String getCommissionType() {
+        return commissionType;
+    }
+
+    public String getCommissionCutting() {
+        return commissionCutting;
+    }
+}
+```
+
+대부분이 String 으로 이루어진 간단한 domain 입니다.
+
+domain 클래스를 보면 setter가 없습니다. 이는 의도한 것인데, getter 와 달리 setter는 무분별하게 생성하지 않습니다.
+
+domain 인스턴스에 변경이 필요한 이벤트가 있을 경우 그 이벤트를 나타낼 수 있는 메소드를 만들어야하 하며, 무분별하게 값을 변경하는 setter는 최대한 멀리하는게 좋다.
+
+예를 들어, 주문취소 같은 경우 `setOrderStatus` 가 아니라 `cancleOrder()를 만들어서 사용하는것
+
+똑같이 orderStatus를 변경 할지라도, 그 의도와 사용범위가 명확한 메소드를 만드는것이 중요합니다.
+
+그리고 이 domain 을 관리할 repository를 생성
+
+```java
+ContractRepository.java
+
+public interface ContractRepository extends JpaRepository<Contract, Long>{
+    Contract findByCommissionType(String commissionType);
+    Contract findByCommissionCutting(String commissionCutting);
+}
+```
+
+domain 클래스와 repository 클래스가 생성되었으니 간단하게 테스트 클래스를 생성
+
+ApplicationTest.java
+
+```java
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class ApplicationTests {
+
+	@Autowired
+	private ContractRepository repository;
+
+	@Test
+	public void add() {
+		Contract contract = new Contract(
+				"우아한짐카",
+				1.0,
+				"percent",
+				"round"
+		);
+		repository.save(contract);
+		Contract saved = repository.findAll().get(0);
+		assertThat(saved.getCommission(), is(1.0));
+	}
+}
+
+```
+
+save & find가 잘되는 것을 확인할 수 있습니다.
+자 여기서부터 본격적으로 시작해보겠습니다.
+
+## 문제 파악
+
+위 코드를 토대로 시스템을 만든다고 생각해보시면 어떨까요?
+몇가지 문제점이 보이시나요?
+생각하시는것과 다를 수는 있지만, 제가 생각하기엔 다음과 같은 문제가 있습니다.
+
+- commissionType과 commissionCutting 은 IDE 지원을 받을 수 없다.
+
+  - 자동완성, 오타검증 등등
+
+- commissionType과 commissionCutting의 변경 범위가 너무 크다.
+
+  - 예를 들어, commissionType의 money를 mount로 변경해야 한다면 프로젝트 전체에서 money를 찾아 변경해야 합니다.
+    추가로 commissionType의 money 인지, 다른 domain의 money인지 확인하는 과정도 추가되어 비용이 배로 들어가게 됩니다.
+
+* commissionType과 commissionCutting에 잘못된 값이 할당되도 검증하기가 어렵다.
+  - percent, money가 아닌 값이 할당되는 경우를 방지하기 위해 검증 메소드가 필요합니다.
+
+- commissionType과 commissionCutting의 허용된 값 범위를 파악하기 힘들다.
+  - 예를들어 commissionType과commissionCutting을 select box로 표기해야 한다고 생각해보겠습니다.
+  - 이들의 가능한 값 리스트가 필요한데, 현재 형태로는 하드코딩 할 수 밖에 없습니다.
+
+더 있을 수 있지만 위 4가지 문제가 바로 생각나느것 샅습니다.
+그러면 이 문제들을 해결하기 위해서는 어떻게 코드를 수정하면 좋을까요?
+
+## 문제 해결 1
+
+Commission.java
+
+```java
+public interface Commission {
+    String TYPE_PERCENT = "percent";
+    String TYPE_MONEY = "money";
+
+    String CUTTING_ROUND = "round";
+    String CUTTING_CEIL = "ceil";
+    String CUTTING_FLOOR = "floor";
+}
+```
+
+`static 상수` 선언을 함으로써 IDE의 지원을 받을수있고, 혹시나 값을 변경할 일이 있어도
+Commision 인터페이스 값들만 변경되므로 변경범위도 최소화 되었습니다.
+하지만 나머지 2가지 문제가 해결 되지 않습니다.
+
+## 문제 해결 -2
+
+EnumContract.java
+
+```java
+ @Column(nullable = false)
+    @Enumerated(EnumType.STRING) // enum의 name을 DB에 저장하기 위해, 없을 경우 enum의 숫자가 들어간다.
+    private CommissionType commissionType; // 수수료 타입 (예: 퍼센테이지, 금액)
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private CommissionCutting commissionCutting; // 수수료 절삭 (예: 반올림, 올림, 버림)
+
+    public enum CommissionType {
+
+        PERCENT("percent"),
+        MONEY("money");
+
+        private String value;
+
+        CommissionType(String value) {
+            this.value = value;
+        }
+
+        public String getKey() {
+            return name();
+        }
+
+        public String getValue() {
+            return value;
+        }
+    }
+
+    public enum CommissionCutting {
+        ROUND("round"),
+        CEIL("ceil"),
+        FLOOR("floor");
+
+        private String value;
+
+        CommissionCutting(String value) {
+            this.value = value;
+        }
+
+        public String getKey() {
+            return name();
+        }
+
+        public String getValue() {
+            return value;
+        }
+    }
+
+```
+
+이젠 다른 개발자들이 개발을 진행할때도 타입 제한으로 enum외에 다른 값들은 못받도록 하였습니다.
+
+자 여기까지는 쉽게 온것 같습니다. 하지만! 마지막 문제인 commissionType, commissionCutting의 리스트를 보여주는 것은 어떻게 해야할까요?
+enum을 어떻게 잘 활용하면 될 것 같은 느낌이 들지 않으신가요?
+한번 진행해보겠습니다.
+
+### Enum 관리 모듈
+
+특정 enum 타입이 갖고 있는 모든 값을 출력시키는 기능은 Class의 getEnumConstants() 메소드를 사용하면 쉽게 해결할 수 있습니다.
+
+enum의 리스트는 select box 즉, view 영역에 제공되어야 하기 떄문에 Controller에서도 전달하도록 만들어 보겠습니다.
+
+### ApiController.java
+
+```java
+@RestController
+public class ApiController {
+
+    @GetMapping("/enum")
+    public Map<String, Object> getEnum() {
+        Map<String, Object> enums = new LinkedHashMap<>();
+
+        Class commissionType = EnumContract.CommissionType.class;
+        Class commissionCutting = EnumContract.CommissionCutting.class;
+
+        enums.put("commissionType", commissionType.getEnumConstants());
+        enums.put("commissionCutting", commissionCutting.getEnumConstants());
+        return enums;
+    }
+}
+```
