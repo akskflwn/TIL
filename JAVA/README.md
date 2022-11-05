@@ -504,6 +504,92 @@ public static void main(String[] args) {
 람다식을 사용하기 떄문에 소스를 간결하게 작성할 수 있다.
 간단한 반복을 처리할 때에는 forEach와 람다식을 활용해보자.
 
+### 함수형 인터페이스 ㅏㅌ입의 매개변수와 반환타입
+
+```java
+@FunctionalInterface
+interface MyFunction {
+  void myMethod();
+}  //추상 메서드
+```
+
+메서드의 매개변수가 MyFunction 타입이면,
+
+이 메서드를 호출할 때 람다식을 참조하는 참조변수를 매겨변수로 지정해야한다는 뜻이다.
+
+```java
+void aMethod(MyFunction f){ //매개변수의 타입이 함수형 인터페이스
+  f.myMethod(); //Myfuntion에 정의된 메서드 호출
+}
+MyFunction f = () => System.out.println("MyMethod()");
+aMethod.(f);
+```
+
+또는 참조변수 없이 아래와 같이 직접 람다식을 매개변수로 지정하는 것이 가능하다.
+
+```java
+aMethod(()-> System.out.println("MyMethod()"));
+//람다식을 매개 변수로 지정
+```
+
+그리고 메서드의 반환타입이 함수형 인터페이스 타입이라면, 이 함수형 인터페이스의 추상메서드와 동등한 람다식을 가리키는 참조변수를 반환하거나 람다식을 직접 반환할 수 있다.
+
+```java
+MyFuntion myMethod() {
+  Myfunction f = () -> {};
+  return f; // 이 줄과 윗줄을 한 줄로 합치면, return ()->{};
+}
+```
+
+람다식을 참조변수로 다룰 수 있는 것은 메서드를 통해 람다식을 주고 받을 수 있다는 것을 의미한다. 즉 , 변수처럼 메서드를 주고 받는 것이 가능해 진다.
+
+사실상 메서드가 아니라 객체르 주고받는 것이라 근복적으로 달라진 것은 아무것도 없지만, 람다식 덕분에 예전보다 코드가 간결하고 이해하기 쉬워졌다.
+
+```java
+@FuntionalInterface
+interFace Myfuntion(){
+  void run(); // public abstract void run();
+}
+
+class Ex1{
+  static void execute(Myfunction f) { //매개변수의 타입이 MyFunction인 메서드
+    f.run();
+  }
+  static MyFuntion getMyFunction() { //반환 타입이 MyFuntion 인 메서드
+    MyFunction f = () -> System.out.println("f3.run()");
+    return f;
+  }
+
+  public static void main(String[] args) {
+    //람다식으로 MyFunction 의 run() 을 구현
+
+    MyFunction f1 = () -> System.out.println("f1.run()");
+
+    MyFunction f2 = new MyFunction() { //익명 클래스로 run() 을 구현
+      public void run () //public 을 반드시 붙여야함
+        System.out.println("f2.run()");
+    };
+
+    My Function f3 = getMyFunction();
+
+    f1.run();
+    f2.run();
+    f3.run();
+
+    execute(f1);
+    execut ( ()-> System.out.println("run()"));
+  }
+}
+
+실행 결과->
+f1.run();
+f2.run()
+f3.run()
+f1.run()
+run()
+
+```
+
 ## Stream
 
 > Stream의 특징

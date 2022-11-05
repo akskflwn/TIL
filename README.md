@@ -28,6 +28,8 @@
 
 ### Algorithm
 
+- [백준 알고리즘 풀이 정리](https://github.com/akskflwn/TIL/blob/main/algorithm/READme.md)
+
 ### TDD
 
 - [단위 테스트와 TDD](https://github.com/akskflwn/TIL/blob/main/TDD/Testcode.md)
