@@ -506,7 +506,7 @@ public static void main(String[] args) {
 람다식을 사용하기 떄문에 소스를 간결하게 작성할 수 있다.
 간단한 반복을 처리할 때에는 forEach와 람다식을 활용해보자.
 
-### 함수형 인터페이스 ㅏㅌ입의 매개변수와 반환타입
+### 함수형 인터페이스 타입의 매개변수와 반환타입
 
 ```java
 @FunctionalInterface
@@ -646,7 +646,55 @@ public class Main {
 (3) 중간 처리와 최종 처리가 존재한다.
 스트림은 컬렉션 요소에 대해 중간 처리와 최종 처리를 수행할 수있는데, 중간 처리에서는 매핑,필터링,정렬을 수행하고 최종 처리에 반복,카운팅,평균,총합 등의 집계 처리를 수행합니다.
 
-만약, 학생 객체를 요소로 가지는 컬렉션이 있다고 가정하면, 중간 처리에서 학생의 수학 점수를 뽑아 내고 최종 처리에서는 수학 점수의 평균값을 산출하는 행위를 할 수 있습니다.
+## 스트림 sort
+
+스트림을 정렬할때는 sorted()를 사용하면 된다.
+
+```java
+Stream<T> sorted()
+Stream<T> sorted(Comparator<? super T> comparator)
+```
+
+sorted()는 지정된 Comparator 로 스트림을 정렬하는데, Comparator 대신 int 값을 반환하는 람다식을 사용하는 것도 가능하다. Comparator를 지정하지 않으면 스트림 요소의 기본 정렬 기준 Comparable으로
+정렬한다.
+
+```java
+ Stream<String> strStream -> 을 sorted() 하게 되면 String에 구현된 Comparable 기준으로 정렬됨.
+```
+
+정렬에 사용되는 메서드의 개수가 많지만, 가장 기본적인 메서드는 Comparing()이다.
+
+```java
+comparing(Function<T, U> ketExtractor)
+comparing(Function<T, U> ketExtractor, Comparator<U> keyComparator)
+```
+
+스트림의 요소가 Comparable을 구현한 경우, 매개변수 하나짜리를 사용하면 되고 그렇지 않은 경우, 추가적인 매개변수로 정렬기준(Comparator)를 따로 지정해 줘야한다.
+
+```java
+comparingInt(ToIntFunction<T> keyExtractor)
+comparingLong(ToLongFunction<T> keyExtractor)
+comparingDouble(ToDoubleFunction<T> keyExtractor)
+```
+
+비교 대상이 기본형인 경우, comparing() 대신 위의 메서드를 사용하면 오토박싱과 언방싱과정이 없어서 더 효율적이다. 그리고 정렬 조건을 추가할 때는 thenComparing()을 사용한다.
+
+```java
+thenComparing(Comparator<T> other)
+t0henComparing(Functuon<T, U> keyExtractor)
+t0henComparing(Functuon<T, U> keyExtractor, Comparator<U> key)
+```
+
+예를 들어 학생 스트림(studentStream)을 반 별 , 성적순, 그리고 이름순으로정렬하여 출력하려면
+
+```java
+studentStream.sorted(Comparator.comparing(Student::getBan)
+                            .thenComparing(Student::getTotalScore)
+                            .thenComparing(Student::getName
+                            .forEach(System.out.println)));
+```
+
+## 스트림 변환 - (map)
 
 ## 멀티 스레드란?
 
