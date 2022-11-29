@@ -1074,6 +1074,8 @@ class Solution {
 ```
 
 ```java
+package programers.전화번호목록;
+
 import java.util.Arrays;
 
 class Solution {
@@ -1088,6 +1090,51 @@ class Solution {
         }
 
         return answer;
+    }
+
+```
+
+```java
+package programers.프린터;
+
+import java.util.ArrayList;
+import java.util.List;
+
+class Solution {
+
+    public int solution(int[] priorities, int location) {
+        //1.Queue를 만든다.
+        List<Paper> printer = new ArrayList<>();
+        for (int i = 0; i < priorities.length; i++) {
+            printer.add(new Paper(i, priorities[i]));
+        }
+        //2.0번을 꺼내서 max priority 가 아니라면 다시 넣는다.
+        int turn = 0;
+        while (!printer.isEmpty()) {
+            Paper paper = printer.remove(0);
+            if (printer.stream().anyMatch(otherPaper -> paper.priority < otherPaper.priority)) {
+                printer.add(paper);
+            } else {
+                //3. max priority라면 내가 찾는 서류가 맞는지 확인한다.
+                turn++;
+                if (paper.location == location) {
+                    break;
+                }
+            }
+        }
+
+        return turn;
+    }
+
+    public class Paper {
+
+        int location;
+        int priority;
+
+        public Paper(int location, int priority) {
+            this.location = location;
+            this.priority = priority;
+        }
     }
 
 ```
