@@ -12,6 +12,8 @@
 - [이진 탐색](#이진탐색)
 - [DP 유형](#DP)
 
+* [프로그래머스 문제 풀이](#프로그래머스-문제-풀이);
+
 # 코딩 테스트를 위한TIP
 
 # 문제 해결을 위한 전략적 접근
@@ -990,4 +992,62 @@ public class Main {
         return lo;
     }
 }
+```
+
+# 프로그래머스 문제 풀이
+
+```java
+package programers.완주하지못한선수;
+
+import java.util.Arrays;
+import java.util.HashMap;
+
+class Solution {
+        //Map 사용 풀이
+    public String solution(String[] participant, String[] completion) {
+        String answer = "";
+        HashMap<String, Integer> map = new HashMap<>();
+        for (String part : participant) {
+            map.put(part, map.getOrDefault(part, 0) + 1);
+        }
+
+        for (String part : completion) {
+            map.put(part, map.get(part) - 1);
+        }
+        System.out.println(map);
+        System.out.println(map.keySet());
+        for (String key : map.keySet()) {
+            if (map.get(key) != 0) {
+                answer = key;
+            }
+        }
+        return answer;
+    }
+
+    public static void main(String[] args) {
+        String[] part = {"leo", "kiki", "eden"};
+        String[] comp = {"kiki", "eden"};
+        Solution sol = new Solution();
+
+        System.out.println(sol.solution(part, comp));
+    }
+}
+    //Sort 사용 풀이
+import java.util.Arrays;
+
+class Solution {
+
+    public String solution(String[] participant, String[] completion) {
+        Arrays.sort(participant);
+        Arrays.sort(completion);
+        int i = 0;
+        for (; i < completion.length; i++) {
+            if (!participant[i].equals(completion[i])) {
+                break;
+            }
+        }
+        return participant[i];
+    }
+}
+
 ```
