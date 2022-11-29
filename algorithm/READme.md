@@ -1032,7 +1032,7 @@ class Solution {
         System.out.println(sol.solution(part, comp));
     }
 }
-    //Sort 사용 풀이
+        //Sort 사용 풀이
 import java.util.Arrays;
 
 class Solution {
@@ -1049,5 +1049,26 @@ class Solution {
         return participant[i];
     }
 }
+
+```
+
+```java
+package programers.위장;
+
+import java.util.HashMap;
+
+class Solution {
+    HashMap<String,Integer> map = new HashMap<>();
+    public int solution(String[][] clothes) {
+        int answer = 1;
+        for(String[] key : clothes){
+            String clothe  = key[1];
+            map.put(clothe, map.getOrDefault(clothe,0)+1);
+        }
+        for(Integer val : map.values()){
+            answer*= val+1;
+        }
+        return answer-1;
+    }
 
 ```
