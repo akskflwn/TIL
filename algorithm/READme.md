@@ -1061,14 +1061,33 @@ class Solution {
     HashMap<String,Integer> map = new HashMap<>();
     public int solution(String[][] clothes) {
         int answer = 1;
-        for(String[] key : clothes){
-            String clothe  = key[1];
-            map.put(clothe, map.getOrDefault(clothe,0)+1);
+        for(String[] clothe : clothes){
+            String type  = clothe[1];
+            map.put(type, map.getOrDefault(type,0)+1);
         }
         for(Integer val : map.values()){
             answer*= val+1;
         }
         return answer-1;
+    }
+
+```
+
+```java
+import java.util.Arrays;
+
+class Solution {
+
+    public boolean solution(String[] phone_book) {
+        boolean answer = true;
+        Arrays.sort(phone_book);
+        for (int i = 0; i < phone_book.length - 1; i++) {
+            if(phone_book[i+1].startsWith(phone_book[i])){
+                answer = false;
+            }
+        }
+
+        return answer;
     }
 
 ```
