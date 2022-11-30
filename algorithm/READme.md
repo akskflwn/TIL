@@ -1187,3 +1187,45 @@ class Solution {
     }
 }
 ```
+
+```java
+package programers.귤고르기;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+
+class Solution {
+
+    public int solution(int k, int[] tangerine) {
+        HashMap<Integer, Integer> hashMap = new HashMap<>();
+        int answer = 0;
+
+        for (int t : tangerine) {
+            hashMap.put(t, hashMap.getOrDefault(t, 0) + 1);
+        }
+        List<Integer> countList = new ArrayList<>(hashMap.values());
+        Collections.sort(countList, Collections.reverseOrder());
+        System.out.println(countList);
+        for (int i : countList) {
+            k -= i;
+            answer++;
+            if (k <= 0) {
+                break;
+            }
+        }
+
+        return answer;
+    }
+
+
+    public static void main(String[] args) {
+        int k = 6;
+        int[] tangerine = {1, 3, 2, 5, 4, 5, 2, 3};
+        Solution solution = new Solution();
+        System.out.println(solution.solution(k, tangerine));
+
+    }
+}
+```
