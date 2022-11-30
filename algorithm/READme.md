@@ -1366,7 +1366,7 @@ class Solution {
        for(int i : resSet){
            if(lostSet.contains(i-1))
                lostSet.remove(i-1);
-            if(lostSet.contains(i+1))
+            else if(lostSet.contains(i+1))
                lostSet.remove(i+1);
        }
        return n - lostSet.size();
