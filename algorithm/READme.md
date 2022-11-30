@@ -1136,5 +1136,54 @@ class Solution {
             this.priority = priority;
         }
     }
+```
 
+```java
+package programers.두큐의합;
+import java.util.LinkedList;
+import java.util.Queue;
+
+class Solution {
+
+    public int solution(int[] queue1, int[] queue2) {
+        Queue<Long> que1 = new LinkedList<>();
+        Queue<Long> que2 = new LinkedList<>();
+        long que1Sum = 0;
+        long que2Sum = 0;
+
+        for (long i : queue1) {
+            que1.add(i);
+            que1Sum += i;
+        }
+        for (long i : queue2) {
+            que2Sum += i;
+            que2.add(i);
+        }
+        long eachSum = (que1Sum + que2Sum) / 2;
+        int count = 0;
+        while (que1Sum != que2Sum) {
+            if (count>3000000) {
+                return -1;
+            }
+            if (eachSum < que1Sum) {
+                que1Sum -= que1.peek();
+                que2Sum += que1.peek();
+                que2.add(que1.poll());
+            } else {
+                que2Sum -= que2.peek();
+                que1Sum += que2.peek();
+                que1.add(que2.poll());
+            }
+            count++;
+        }
+
+        return count;
+    }
+    public static void main(String[] args) {
+        Solution sol = new Solution();
+        int[] que1 = {3, 2, 7, 2};
+        int[] que2 = {4, 6, 5, 1};
+        System.out.println(sol.solution(que1, que2));
+    }
+}
 ```
