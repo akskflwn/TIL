@@ -1229,3 +1229,81 @@ class Solution {
     }
 }
 ```
+
+```java
+package programers.메뉴리뉴얼;
+
+import java.util.*;
+
+class Solution {
+
+    List<String> answerList = new ArrayList<>();
+    Map<String, Integer> hashMap = new HashMap<>();
+
+    public String[] solution(String[] orders, int[] course) {
+        // 1.각 Order를 정렬한다.
+        // 정렬이 유리하다고 판단하는 이유
+        // 1-1 순서가 중요하지 않다고 판단.
+        // 만약 WX와 XW가 다른 조합이라면 정렬하는게 의미가 없다.
+        // 최종적으로 WX와 XW는 같은거고 제출은 WX 로 해야하기 때문에 정렬은 꼭 한번 해야한다.
+        // 맨처음에 한번을 쭉 조합을 하던가
+        // 조합을 해가면서 정렬을 하던가 인데 한번에 하는것이 더 효율적이다.
+        for (int i = 0; i < orders.length; i++) {
+            char[] arr = orders[i].toCharArray();
+            Arrays.sort(arr);
+            orders[i] = String.valueOf(arr);
+        }
+        // 2.각 Order를 기준으로 courseLength만큼 조합을 만든다.
+        for (int courseLength : course) {
+            for (String order : orders) {
+                combination("", order, courseLength);
+            }
+            // 3. 가장 많은 조합을 answer에 담는다.
+            if (!hashMap.isEmpty()) {
+                List<Integer> countList = new ArrayList<>(hashMap.values());
+                int max = Collections.max(countList);
+
+                if (max > 1) {
+                    for (String key : hashMap.keySet()) {
+                        if (hashMap.get(key) == max) {
+                            answerList.add(key);
+                        }
+                    }
+                }
+
+                hashMap.clear();
+            }
+        }
+        Collections.sort(answerList);
+
+        String[] answer = new String[answerList.size()];
+        for (int i = 0; i < answer.length; i++) {
+            answer[i] = answerList.get(i);
+        }
+        return answer;
+    }
+
+    private void combination(String order, String others, int courseLength) {
+        //order 현재까지 조합된 코스
+        // others 아직 조합되지 않은 알파벳
+        // 몇개를 더 조합해야 하는지에대한 courseLength
+
+        //탈출 조건
+        if (courseLength==0){
+            hashMap.put(order,hashMap.getOrDefault(order,0)+1);
+            return;
+        }
+        //수행 동작 0 부터 length까지 조합
+        for (int i = 0; i < others.length(); i++) {
+            combination(order + others.charAt(i), others.substring(i+1),courseLength-1);
+        }
+    }
+
+    public static void main(String[] args) {
+        Solution sol = new Solution();
+        String[] orders = {"ABCFG", "AC", "CDE", "ACDE", "BCFG", "ACDEH"};
+        int[] course = {2, 3, 4};
+        System.out.println(Arrays.toString(sol.solution(orders, course)));
+    }
+}
+```
