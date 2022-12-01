@@ -994,6 +994,35 @@ public class Main {
 }
 ```
 
+```java
+11478 서로다른 부문 문자열 갯수
+import java.util.HashSet;
+import java.util.Scanner;
+import java.util.Set;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String s = sc.next();
+        Set<String> set = new HashSet<>();
+
+        String temp;
+
+        for (int i = 0; i < s.length(); i++) {
+                temp ="";
+            for (int j = i; j < s.length(); j++) {
+                temp += s.substring(j,j+1);
+                System.out.println(temp);
+                set.add(temp);
+            }
+        }
+        System.out.println(set.size());
+
+    }
+}
+```
+
 # 프로그래머스 문제 풀이
 
 ```java
