@@ -185,6 +185,58 @@ public class Main {
 
     }
 }
+
+### 백준 2477번 문제
+```java
+package programers.참외밭;
+
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int N = sc.nextInt();
+        int[] arr = new int[6];
+        int[] dir = new int[6];
+        int heightMax = 0;
+        int heightMin = 0;
+        int widthMax = 0;
+        int widthMin = 0;
+
+        for (int i = 0; i < 6; i++) {
+            int d = sc.nextInt();
+            int val = sc.nextInt();
+            dir[i] = d;
+            arr[i] = val;
+            if(d==1 || d == 2){
+                widthMax = Math.max(widthMax,val);
+            }
+            else {
+                heightMax = Math.max(heightMax,val);
+            }
+        }
+
+        for (int i = 0; i < 6; i++) {
+            //걱이는지점
+            //동서남북1234
+            int beforeDir = (i+5)%6;
+            int nextDir = (i+1)%6;
+            if(dir[beforeDir]==dir[nextDir]){
+                if(dir[i]==1 || dir[i]==2){
+                    widthMin = arr[i];
+                }else{
+                    heightMin=arr[i];
+                }
+            }
+        }
+        int answer = N*(heightMax * widthMax - heightMin * widthMin);
+        System.out.println(answer);
+
+    }
+}
+
+```
 프로그래머스 배열 비교 문제
 ```java
  public int[] solution(int[] lottos, int[] win_nums) {
