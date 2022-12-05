@@ -1540,3 +1540,64 @@ class Solution {
 }
 
 ```
+
+```java
+package programers.신고결과받기;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+
+class Solution {
+
+    public int[] solution(String[] id_list, String[] report, int k) {
+        int[] answer = new int[id_list.length];
+        //1. 신고자 목록에서 중복을 제거한다..
+        HashSet<String> set = new HashSet<>(Arrays.asList(report));
+
+
+        //2. 각 유저별로 신고한 map 을만든다
+        //key는 신고당한사람 value는 List<신고한사람들>
+        HashMap<String, List<String>> hashMap = new HashMap<>();
+        for (String rep : set) {
+            int blankIdx = rep.indexOf(" ");
+            String reporter = rep.substring(0,blankIdx);
+            String reportee = rep.substring(blankIdx+1);
+
+            List<String> reporterList = hashMap.getOrDefault(reportee,null);
+            if(reporterList==null){
+                reporterList = new ArrayList<>();
+            }
+
+            reporterList.add(reporter);
+            hashMap.put(reportee,reporterList);
+        }
+
+        //3 key : reportee vlaue: 신고당한 횟수 map을 만든다.
+        HashMap<String,Integer> reporterHash = new HashMap<>();
+        for(List<String> reporterList : hashMap.values()){
+            if(reporterList.size()>=k){
+                for (String reporter : reporterList) {
+                    reporterHash.put(reporter,reporterHash.getOrDefault(reporter,0)+1);
+                }
+            }
+        }
+
+        //4 신고횟수가 k 이상인 reportee를 신고한 횟수를 id_list순으로 리턴해준다.
+        for (int i = 0; i < answer.length; i++) {
+            answer[i]= reporterHash.getOrDefault(id_list[i],0);
+        }
+        return answer;
+    }
+
+    public static void main(String[] args) {
+        String[] id_list = {"muzi", "frodo", "apeach", "neo"};
+        String[] report = {"muzi frodo", "apeach frodo", "frodo neo", "muzi neo", "apeach muzi"};
+        int k = 2;
+        Solution sol = new Solution();
+        System.out.println(Arrays.toString(sol.solution(id_list, report, k)));
+    }
+}
+```
